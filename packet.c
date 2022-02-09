@@ -294,8 +294,12 @@ static int read_packet_init() {
 	return DROPBEAR_SUCCESS;
 }
 
-/* handle the received packet */
 void decrypt_packet() {
+	decrypt_packet_(&ses);
+}
+
+/* handle the received packet */
+void decrypt_packet_(struct sshsession *sesT) {
 
 	unsigned char blocksize;
 	unsigned char macsize;
