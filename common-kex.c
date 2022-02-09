@@ -40,7 +40,7 @@
 #include "crypto_desc.h"
 
 static void kexinitialise(void);
-static void gen_new_keys(void);
+static void gen_new_keys(struct sshsession *sesT);
 #ifndef DISABLE_ZLIB
 static void gen_new_zstream_recv(void);
 static void gen_new_zstream_trans(void);
@@ -180,7 +180,7 @@ void send_msg_newkeys() {
 	}
 	ses.kexstate.donefirstkex = 1;
 	ses.dataallowed = 1; /* we can send other packets again now */
-	gen_new_keys();
+	gen_new_keys(&ses);
 	switch_keys();
 
 	TRACE(("leave send_msg_newkeys"))
@@ -285,7 +285,7 @@ static void hashkeys(unsigned char *out, unsigned int outlen,
  * ses.newkeys is the new set of keys which are generated, these are only
  * taken into use after both sides have sent a newkeys message */
 
-static void gen_new_keys() {
+static void gen_new_keys(struct sshsession *sesT) {
 
 	unsigned char C2S_IV[MAX_IV_LEN];
 	unsigned char C2S_key[MAX_KEY_LEN];
